@@ -88,6 +88,7 @@ int main() {
     return 0;
 }
 */
+/*
 #include <iostream>
 #include <sys/select.h>
 #include <termios.h>
@@ -133,4 +134,60 @@ int main() {
     tcsetattr(STDIN_FILENO, TCSANOW, &old_tio);
 
     return 0;
+}
+*/
+/*template <size_t pRows, size_t pCols>
+void spawnNewItem(Place (&arr)[pRows][pCols]) {
+        };
+*/
+
+// C++ program to demonstrate
+// the use of rand()
+/*
+#include <iostream>
+#include <random>
+
+int main() {
+    // Create a random number engine (Mersenne Twister engine)
+    std::random_device rd; // Used to obtain a random seed
+    std::mt19937 gen(rd()); // Mersenne Twister engine
+
+    // Define the range for the random number
+    int minNum = 1;
+    int maxNum = 100;
+
+    // Create a uniform distribution for integers in the specified range
+    std::uniform_int_distribution<int> dist(minNum, maxNum);
+
+    // Generate a random number within the specified range
+    int randomNumber = dist(gen);
+
+    // Print the generated random number
+    std::cout << "Random number: " << randomNumber << std::endl;
+
+    return 0;
+}
+*/
+#include<iostream>
+#include<cstdlib>
+using namespace std;
+
+int main(){
+
+	// Providing a seed value
+	srand((unsigned) time(NULL));
+
+	// Loop to get 5 random numbers
+	for(int i=1; i<=5; i++){
+		
+		// Retrieve a random number between 100 and 200
+		// Offset = 100
+		// Range = 101
+		int random = 100 + (rand() % 101);
+
+		// Print the random number
+		cout<<random<<endl;
+	}
+
+	return 1;
 }

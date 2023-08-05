@@ -49,7 +49,7 @@ int main()
 
         std::this_thread::sleep_for(std::chrono::seconds(1));
         system("clear");
-        gameSpace.moveDown(1);
+        gameSpace.moveDown();
         gameSpace.printSpace();
         
     }
