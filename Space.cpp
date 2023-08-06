@@ -220,9 +220,10 @@ class Space{
             switch (move)
             {
                 case 'a' :  moveInt = -1;
-                            for(int i = 0 ; i < rows ; i++){
+                            if(checkForSides(moveInt)){
+                                for(int i = 0 ; i < rows ; i++){
                                 for (int j = 0 ; j < columns ; j++){
-                                    if((j+moveInt < columns && j+moveInt>=0) && space[i][j].mainInt==activeNum && !space[i][j].movedSide && !space[i][j].locked && checkForMoveSide(j+moveInt,moveInt)){
+                                    if((j+moveInt < columns && j+moveInt>=0) && space[i][j].mainInt==activeNum && !space[i][j].movedSide && !space[i][j].locked && checkForMoveSide(j+moveInt,moveInt,i)){
                                         int temp = space[i][j].mainInt;
                                         space[i][j+moveInt].mainInt = temp;
                                         space[i][j].mainInt = 0;
@@ -231,11 +232,13 @@ class Space{
                                     }
                                 }
                             }
+                            }
                             break;
                 case 'd' :  moveInt = +1;
-                            for(int i = rows - 1 ; i >= 0 ; i--){
+                            if(checkForSides(moveInt)){
+                                for(int i = rows - 1 ; i >= 0 ; i--){
                                 for (int j =columns-1 ; j >= 0 ; j--){
-                                    if((j+moveInt < columns && j+moveInt>=0) && space[i][j].mainInt==activeNum && !space[i][j].movedSide && !space[i][j].locked && checkForMoveSide(j+moveInt,moveInt)){
+                                    if((j+moveInt < columns && j+moveInt>=0) && space[i][j].mainInt==activeNum && !space[i][j].movedSide && !space[i][j].locked && checkForMoveSide(j+moveInt,moveInt,i)){
                                         int temp = space[i][j].mainInt;
                                         space[i][j+moveInt].mainInt = temp;
                                         space[i][j].mainInt = 0;
@@ -243,6 +246,7 @@ class Space{
                         
                                     }
                                 }
+                            }
                             }
                             break;
             
@@ -251,13 +255,22 @@ class Space{
             move = NULL;
             resetMovedSideBlock();
         }
-        bool checkForMoveSide(int colNum, int moveInt){
-            for (int i = 0; i < rows;i++){
+        bool checkForSides(int moveInt){
+            for(int i = 0 ; i < rows ; i++){
+                                if((space[i][0].mainInt != 0 && !space[i][0].locked && moveInt < 0) || (space[i][columns-1].mainInt != 0 && !space[i][columns-1].locked && moveInt > 0)){
+                                    return false;
+                                }
+                }
+                return true;
+        }
+        bool checkForMoveSide(int colNum, int moveInt,int rowNum){
+            
                 
-                if(space[i][colNum].mainInt!=0 && space[i][colNum-moveInt].mainInt!=0 && !space[i][colNum-moveInt].locked){
+                if(space[rowNum][colNum].mainInt!=0 && space[rowNum][colNum-moveInt].mainInt!=0 && !space[rowNum][colNum-moveInt].locked){
                     return false;
                 }
-            }
+                
+
             return true;
         }
         void resetMovedSideBlock(){
