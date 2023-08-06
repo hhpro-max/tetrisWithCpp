@@ -141,12 +141,14 @@ class Space{
             return true;
         }
         void lockEveryThing(){
-            
+            checkForDeleteRow();
             for(int i = rows -1 ; i >= 0 ; i--){
                 for (int j = columns -1;j >= 0 ; j--){
                     if (space[i][j].mainInt != 0)
                     {
                         space[i][j].locked = true;
+                    }else{
+                        space[i][j].locked = false;
                     }
                     
                 }
@@ -280,6 +282,39 @@ class Space{
                     
                 }
             }
+        }
+        void checkForDeleteRow(){
+            for(int i = 0 ; i < rows ; i++){
+                bool clearRow = false;
+                for (int j = 0;j < columns ; j++){
+                    int temp = space[i][j].mainInt;
+                    if (temp == 0)
+                    {
+                        break;
+                    }
+                    if(j == columns - 1){
+                        clearRow = true;
+                    }
+                    
+                }
+                if (clearRow){
+                    int clearedRow = i;
+                    for (int j = 0;j < columns ; j++){
+                        space[i][j].mainInt = 0;
+                    }
+                    for(int l = clearedRow -1 ; l >= 0 ; l--){
+                    for (int k = columns -1;k >= 0 ; k--){
+                        
+                            int temp = space[l][k].mainInt;
+                            space[l+1][k].mainInt = temp;
+                            space[l][k].mainInt = 0;
+                            
+                    
+                }
+            }
+                }
+            }
+            
         }
         
     Space(){

@@ -168,6 +168,7 @@ int main() {
     return 0;
 }
 */
+/*
 #include<iostream>
 #include<cstdlib>
 using namespace std;
@@ -191,3 +192,29 @@ int main(){
 
 	return 1;
 }
+*/
+#include <iostream>
+
+int main() {
+    bool shouldBreak = false;
+
+    for (int i = 1; i <= 3 && !shouldBreak; i++) {
+        std::cout << "Outer Loop: Iteration " << i << std::endl;
+
+        for (int j = 1; j <= 3; j++) {
+            if(j == 2){
+                break;
+            }
+            std::cout << j << "\n";
+            std::cout << i << "\n";
+            
+            
+        }
+    }
+
+    std::cout << "Continuing with the code after the outer loop." << std::endl;
+
+    return 0;
+}
+
+
