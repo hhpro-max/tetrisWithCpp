@@ -34,7 +34,7 @@ int main()
                 std::cin.get(input); // Read the user input character
                 
                 userInput = input;
-                std::cout << "User input received: " << userInput << std::endl;
+                
             }
         }
 
@@ -44,7 +44,8 @@ int main()
     
     while(true){
         if(userInput!=NULL){
-
+            std::cout <<  userInput;
+            gameSpace.moveSide(userInput);
         }
 
         std::this_thread::sleep_for(std::chrono::seconds(1));

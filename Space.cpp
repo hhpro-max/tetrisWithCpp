@@ -5,7 +5,8 @@ struct Place
     std::string firstBlock = "[";
     int mainInt = 0;
     std::string lastBlock = "]";
-    bool moved = false;
+    bool movedDown = false;
+    bool movedSide = false;
     bool locked = false;
 };
 
@@ -56,7 +57,7 @@ class Space{
                 }
             }
             //init shapeT
-            place.mainInt=4;
+            place.mainInt=5;
             for(int i = 0;i<2;i++){
                 for(int j = 0 ; j < 3 ; j++){
                     if((i == 0 ) || (i == 1 && j!=0 && j!=2)){
@@ -96,38 +97,46 @@ class Space{
             for(int i = rows -1 ; i >= 0 ; i--){
                 for (int j = columns -1;j >= 0 ; j--){
                     
-                    if (i!=rows - 1 && space[i][j].mainInt==activeNum && !space[i][j].moved && !space[i][j].locked && !space[i+1][j].locked && checkForMoveDown(i + 1)){
+                    if (i!=rows - 1 && space[i][j].mainInt==activeNum && !space[i][j].movedDown && !space[i][j].locked && !space[i+1][j].locked && checkForMoveDown(i + 1)){
                         
                         int temp = space[i][j].mainInt;
                         space[i+1][j].mainInt = temp;
                         space[i][j].mainInt = 0;
-                        space[i+1][j].moved = true;
+                        space[i+1][j].movedDown = true;
                         
                         
                     }
                     
                 }
             }
-            
+            checkToLockMoveDown();
             checkToLockLastRaw();
-            resetMovedBlock();
+            resetMovedDownBlock();
+        }
+        void checkToLockMoveDown(){
+            for(int i = 0 ; i < rows ; i++){
+                for (int j = 0;j < columns ; j++){
+                        if (space[i][j].mainInt != 0 && space[i+1][j].mainInt != 0 && !space[i][j].locked && space[i+1][j].locked){
+                        lockEveryThing();
+                        break;
+                    
+                    
+                    }
+                    }
+                }
         }
         bool checkForMoveDown(int rowNum){
             
             
                 for (int j = columns -1;j >= 0 ; j--){
-                    if (space[rowNum][j].locked){
-                        return false;
-                    
-                    
-                    }
-                    if (space[rowNum][j].mainInt != 0 && space[rowNum-1][j].mainInt != 0){
-                        lockEveryThing();
+                    if (space[rowNum][j].mainInt != 0 && space[rowNum-1][j].mainInt != 0 && !space[rowNum-1][j].locked){
+                        //lockEveryThing();
                         return false;
                     
                     
                     }
                 }
+                
             
             return true;
         }
@@ -146,23 +155,26 @@ class Space{
             
         }
         void checkToLockLastRaw(){
-            bool newItem = false;
+            
             for (int i = 0;i < columns;i ++)
             {
                 if(space[rows-1][i].mainInt != 0 && !space[rows-1][i].locked){
-                    space[rows-1][i].locked = true;
+                    /*space[rows-1][i].locked = true;
                     if(!newItem){
                         spawnNewItem();
                         newItem = true;
-                    }
+                    }*/
+                    lockEveryThing();
+                    break;
                 }
             }
             
         }
-        void resetMovedBlock(){
+        void resetMovedDownBlock(){
             for(int i = 0 ; i < rows ; i++){
                 for (int j = 0;j < columns ; j++){
-                    space[i][j].moved = false;
+                    space[i][j].movedDown = false;
+                    
                 }
             }
         }
@@ -202,7 +214,60 @@ class Space{
                 case 4 :    generateItem(shapeT);
                             break;            
             };
+        }
+        void moveSide(char &move){
+            int moveInt = 0;
+            switch (move)
+            {
+                case 'a' :  moveInt = -1;
+                            for(int i = 0 ; i < rows ; i++){
+                                for (int j = 0 ; j < columns ; j++){
+                                    if((j+moveInt < columns && j+moveInt>=0) && space[i][j].mainInt==activeNum && !space[i][j].movedSide && !space[i][j].locked && checkForMoveSide(j+moveInt,moveInt)){
+                                        int temp = space[i][j].mainInt;
+                                        space[i][j+moveInt].mainInt = temp;
+                                        space[i][j].mainInt = 0;
+                                        space[i][j+moveInt].movedSide = true;
+                        
+                                    }
+                                }
+                            }
+                            break;
+                case 'd' :  moveInt = +1;
+                            for(int i = rows - 1 ; i >= 0 ; i--){
+                                for (int j =columns-1 ; j >= 0 ; j--){
+                                    if((j+moveInt < columns && j+moveInt>=0) && space[i][j].mainInt==activeNum && !space[i][j].movedSide && !space[i][j].locked && checkForMoveSide(j+moveInt,moveInt)){
+                                        int temp = space[i][j].mainInt;
+                                        space[i][j+moveInt].mainInt = temp;
+                                        space[i][j].mainInt = 0;
+                                        space[i][j+moveInt].movedSide = true;
+                        
+                                    }
+                                }
+                            }
+                            break;
+            
             }
+            
+            move = NULL;
+            resetMovedSideBlock();
+        }
+        bool checkForMoveSide(int colNum, int moveInt){
+            for (int i = 0; i < rows;i++){
+                
+                if(space[i][colNum].mainInt!=0 && space[i][colNum-moveInt].mainInt!=0 && !space[i][colNum-moveInt].locked){
+                    return false;
+                }
+            }
+            return true;
+        }
+        void resetMovedSideBlock(){
+            for(int i = 0 ; i < rows ; i++){
+                for (int j = 0;j < columns ; j++){
+                    space[i][j].movedSide = false;
+                    
+                }
+            }
+        }
         
     Space(){
         initShapes();
